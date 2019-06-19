@@ -7,9 +7,10 @@
 #include <vector>
 #include <tuple>
 #include <map>
+#include <ctime>
 
 // Dimension of the tree 
-#define K 5
+#define K 3
 
 using namespace std;
 
@@ -53,7 +54,7 @@ nodequad* insert(array<int,K> elements, nodequad* root) {
       s.append("0");
     for (int i=0; i<K; i++){
       do {
-        (root->subtrees)[s];
+        (root->subtrees)[s]; //declares the index as existing
       } while (next(s.begin(), s.end()));
     }
       
@@ -127,10 +128,29 @@ list<array<int,K>> partial_match(array<int,K> partial, nodequad* root, list<arra
   return result;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
   srand (100);
-  array<int,K> a,b,c,d,e;
+  int N = strtol(argv[1], NULL, 10);
+  clock_t begin, end;
+  double total;
+  nodequad* root = NULL; 
+  array<int,K> el;
   // Initialize random element arrays
+  begin = clock();
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < K; j++) {
+      el[j] = rand() % 100;
+    }
+    root = insert(el, root);
+  }
+  end = clock();
+
+  total = double(end - begin) / CLOCKS_PER_SEC;
+
+  cout << "total time of insertion: " << total << endl;
+  cout << "value divided by N: " << total / double(N) << endl;
+  
+  array<int, K> a, b, c, d, e;
   for (int i = 0; i < K; i++) {
     a[i] = rand() % 10; 
     b[i] = rand() % 10; 
@@ -138,9 +158,6 @@ int main() {
     d[i] = rand() % 10; 
     e[i] = rand() % 10; 
   }
-
-  // Create k-d tree
-  nodequad *root = NULL;
 
   // Insert elements into tree
   root = insert(a, root);
@@ -157,7 +174,7 @@ int main() {
   cout << "E => " << e[0] << " " << e[1] << " " << e[2] << " " << e[3] << " " << e[4] << endl;  
 
   // Declaring the partial match query element
-  array<int,K> partial = {-1, -1, 7, -1, -1};
+  array<int,K> partial = {2, -1, 7};
 
   list<array<int,K>> result;
 

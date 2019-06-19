@@ -1,3 +1,7 @@
 *.out
 kd
+quad
+jumplist
 */.vscode/*
+.vscode
+*.txt

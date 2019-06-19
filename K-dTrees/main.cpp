@@ -6,7 +6,7 @@
 #include <tuple>
 
 // Dimension of the tree 
-#define K 5
+#define K 7
 
 using namespace std;
 
@@ -108,8 +108,31 @@ list<array<int,K>> orthogonal_range(array<tuple<double, double>,K> ranges, node 
 }
 
 
-int main() {
+int main(int argc, char* argv[]) {
   srand (101);
+  int N = strtol(argv[1], NULL, 10);
+  clock_t begin, end;
+  double total;
+
+  // Create k-d tree
+  node* root = NULL; 
+  array<int,K> el;
+
+  // Initialize random element arrays
+  begin = clock();
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < K; j++) {
+      el[j] = rand() % 100;
+    }
+    root = insert(el, root);
+  }
+  end = clock();
+
+  total = double(end - begin) / CLOCKS_PER_SEC;
+
+  cout << "total time of insertion: " << total << endl;
+  cout << "value divided by N: " << total / double(N) << endl;
+  
   array<int,K> a,b,c,d,e;
   // Initialize random element arrays
   for (int i = 0; i < K; i++) {
@@ -119,9 +142,6 @@ int main() {
     d[i] = rand() % 10; 
     e[i] = rand() % 10; 
   }
-
-  // Create k-d tree
-  node *root = NULL;
 
   // Insert elements into tree
   root = insert(a, root);
@@ -138,7 +158,7 @@ int main() {
   cout << "E => " << e[0] << " " << e[1] << " " << e[2] << " " << e[3] << " " << e[4] << endl;  
 
   // Declaring the partial match query element
-  array<int,K> partial = {-1, 0, -1, -1, -1};
+  array<int,K> partial = {-1, 0, -1};//, -1, -1};
 
   list<array<int,K>> result;
 
@@ -163,7 +183,7 @@ int main() {
   tuple<double,double> dt (-1, -1);
   tuple<double,double> et (0.7, 4.9);
 
-  array<tuple<double, double>, K> ranges = {at, bt, ct, dt, et};
+  array<tuple<double, double>, K> ranges = {at, bt, ct};//, dt, et};
 
   // Fetching the elements matching our query
   result2 = orthogonal_range(ranges, root, result2);
@@ -173,7 +193,7 @@ int main() {
   while (!result2.empty())
   {
     array<int,K> curr = result2.front();
-    cout << "Partial match result => " << curr[0] << " " << curr[1] << " " << curr[2] << " " << curr[3] << " " << curr[4] << endl;  
+    cout << "Orthogonal Range result => " << curr[0] << " " << curr[1] << " " << curr[2] << " " << curr[3] << " " << curr[4] << endl;  
     result2.pop_front();
   }
 
